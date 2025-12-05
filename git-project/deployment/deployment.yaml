@@ -19,7 +19,7 @@ spec:
         role: web
       containers:
         - name: nginx
-          image: 182624914879.dkr.ecr.ap-northeast-2.amazonaws.com/default/test:latest
+          image: 182624914879.dkr.ecr.ap-northeast-2.amazonaws.com/default/web-app:latest
           ports:
             - containerPort: 80
           resources: {}
