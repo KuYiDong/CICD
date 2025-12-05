@@ -18,9 +18,9 @@ spec:
       nodeSelector:
         role: web
       containers:
-        - image: 182624914879.dkr.ecr.us-east-1.amazonaws.com/default/web-app:latest
-        name: nginx
-        ports:
-        - containerPort: 80
-        resources: {}
-status: {}
+        - name: nginx
+          image: 182624914879.dkr.ecr.ap-northeast-2.amazonaws.com/default/test:latest
+          ports:
+            - containerPort: 80
+          resources: {}
+
