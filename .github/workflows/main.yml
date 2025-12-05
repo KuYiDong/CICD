@@ -7,13 +7,12 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    environment: production   # ← 여기에 Environment 이름 지정
 
     steps:
-      # 1️⃣ 코드 체크아웃
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 2️⃣ AWS Credentials 설정
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -21,32 +20,23 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      # 3️⃣ AWS ECR 로그인
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      # 4️⃣ Docker 이미지 빌드
       - name: Build Docker image
-        run: |
-          docker build -t web-app:latest .
+        run: docker build -t web-app:latest .
 
-      # 5️⃣ Docker 이미지 태그
       - name: Tag image
-        run: |
-          docker tag web-app:latest ${{ steps.login-ecr.outputs.registry }}/default/web-app:latest
+        run: docker tag web-app:latest ${{ steps.login-ecr.outputs.registry }}/default/web-app:latest
 
-      # 6️⃣ Docker 이미지 ECR push
       - name: Push Docker image to ECR
-        run: |
-          docker push ${{ steps.login-ecr.outputs.registry }}/default/web-app:latest
+        run: docker push ${{ steps.login-ecr.outputs.registry }}/default/web-app:latest
 
-      # 7️⃣ deployment.yaml 이미지 태그 업데이트
-      - name: Update image in deployment.yaml
+      - name: Update deployment.yaml image
         run: |
           sed -i "s|image: .*|image: ${{ steps.login-ecr.outputs.registry }}/default/web-app:latest|g" deployment/deployment.yaml
 
-      # 8️⃣ 변경사항 커밋
       - name: Commit updated manifest
         run: |
           git config --local user.name "github-actions"
@@ -54,14 +44,12 @@ jobs:
           git add deployment/deployment.yaml
           git commit -m "Update image tag" || echo "No changes to commit"
 
-      # 9️⃣ 변경사항 push
       - name: Push changes
         uses: ad-m/github-push-action@v0.8.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main
 
-      # 🔟 ArgoCD 자동 sync
       - name: ArgoCD Sync
         run: |
           curl -X POST \
