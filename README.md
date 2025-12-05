@@ -91,9 +91,15 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 
 <br><br>
 
-### EC2  
-<img src="images/EC2.png" alt="EC2" width="600"/>  
-<br><br>
+## ArgoCD 
+**Argocd 설치**
+접속을 위한 수정 사항 
+1. `argocd argocd-cmd-params-cm` Configmaps insecure 수정
+2. `argocd-cm`에서 토큰용 사용자 추가
+<pre>helm install argocd argo/argo-cd -n argocd</pre>
+
+
+
 
 ---
 
