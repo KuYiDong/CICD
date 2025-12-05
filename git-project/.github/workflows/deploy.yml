@@ -1,0 +1,61 @@
+name: CI-CD
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build Docker image
+      run: |
+        docker build -t web-app:latest .
+
+    - name: Tag image
+      run: |
+        docker tag web-app:latest ${{ steps.login-ecr.outputs.registry }}/default/web-app:latest
+
+    - name: Push to ECR
+      run: |
+        docker push ${{ steps.login-ecr.outputs.registry }}/default/web-app:latest
+
+    - name: Update image in deployment yaml
+      run: |
+        sed -i "s|image: .*|image: ${{ steps.login-ecr.outputs.registry }}/default/web-app:latest|g" deployment/deployment.yaml
+
+    - name: Commit updated manifest
+      run: |
+        git config --local user.name "github-actions"
+        git config --local user.email "github-actions@github.com"
+        git add deployment/deployment.yaml
+        git commit -m "Update image tag" || echo "No changes to commit"
+
+    - name: Push changes
+      uses: ad-m/github-push-action@v0.8.0
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: main
+
+    - name: ArgoCD Sync
+      run: |
+        curl -X POST \
+          -H "Authorization: Bearer ${{ secrets.ARGO_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          https://argocd.yunsang.cloud/api/v1/applications/test/sync
+
