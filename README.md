@@ -93,10 +93,26 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 
 ## ArgoCD 
 **Argocd 설치**
-접속을 위한 수정 사항 
+필수 수정 사항 
 1. `argocd argocd-cmd-params-cm` Configmaps insecure 수정
 2. `argocd-cm`에서 토큰용 사용자 추가
 <pre>helm install argocd argo/argo-cd -n argocd</pre>
+
+**HTTPS 비활성화**
+<pre>k edit configmaps -n argocd argocd-cmd-params-cm
+
+apiVersion: v1
+data:
+  server.insecure: "true" #HTTPS 비활성화</pre>
+- argocd는 기본적으로 https을 지원하기 때문에 비활성화 진행
+  
+<pre>k edit configmaps -n argocd argocd-cm
+
+apiVersion: v1
+data:
+  accounts.devops: apiKey,login</pre>
+- adim 계정으로는 token 생성이 불가능하기 때문에 별도의 유저 계정 새성
+
 
 
 
