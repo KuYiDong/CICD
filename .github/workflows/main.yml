@@ -55,3 +55,16 @@ jobs:
           git commit -m "Update image tag" || echo "No changes to commit"
 
       # 9️⃣ 변경사항 push
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.8.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
+
+      # 🔟 ArgoCD 자동 sync
+      - name: ArgoCD Sync
+        run: |
+          curl -X POST \
+            -H "Authorization: Bearer ${{ secrets.ARGO_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            https://<ARGOCD_SERVER_URL>/api/v1/applications/test/sync
