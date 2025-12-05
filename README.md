@@ -50,16 +50,16 @@ terraform apply </pre>
 
 ## ALB-Controller & EBS-CSI-Driver
 ### 1. ALB-Controller 설치
-**DNS 연**
+**[DNS 연]**
 <pre>aws eks --region ap-northeast-2 update-kubeconfig --name $Cluster </pre>
-**ALB Controller용 IAM Policy 생성**
+**[ALB Controller용 IAM Policy 생성]**
 <pre>curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.14.1/docs/install/iam_policy.json
 
 
 aws iam create-policy \
   --policy-name AWSLoadBalancerControllerIAMPolicy \
   --policy-document file://iam_policy.json </pre>
-**IAM ServiceAccount 생성**
+**[IAM ServiceAccount 생성]**
 <pre>eksctl utils associate-iam-oidc-provider --cluster $Cluster --approve
 
 eksctl create iamserviceaccount \
@@ -69,10 +69,10 @@ eksctl create iamserviceaccount \
   --role-name AmazonEKSLoadBalancerControllerRole \
   --attach-policy-arn=arn:aws:iam::$Account:policy/AWSLoadBalancerControllerIAMPolicy \
   --approve</pre>
-**확인**
+**[생성 확인]**
 <pre>kubectl get sa aws-load-balancer-controller -n kube-system -o yaml | grep role-arn</pre>
 
-**AWS-Controller 설치**
+**[AWS-Controller 설치]**
 <pre>helm repo add eks https://aws.github.io/eks-charts
 helm repo update
 
