@@ -5,7 +5,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: web-app-service
+    app: nginx-deploy
   ports:
     - port: 80
       targetPort: 80
