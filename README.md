@@ -7,6 +7,8 @@
 # 프로젝트 개요
 
 해당 프로젝트는 **Terraform과 ArgoCD를 활용하여 클라우드 환경에서 Kubernetes(EKS) 기반 인프라를 자동으로 구축하고, CI/CD 및 모니터링까지 통합 관리하는 프로젝트**입니다.
+Infrastructure as Code(IaC)를 통하여 인프라를 코드 형식으로 관리하며 자동화를 통하여 인프라를 배포합니다. GitOps 기반 관리릂통하여 배포 및 업데이트 과정의 투명성 확보하며 버전 관리 용이해집니다.Grafana와 Prometheus를 통해 쿠버네티스 내의 서비스 상태와 성능을 실시간으로 모니터링하며 CI/CD 파이프라인을 통해 개발자가 Git에 Push 하면 GitHub Actions가 이미지를 빌드 후 ECR에 Push 및 감지를 통해 실시간으로 변동 사항을 감지하여 언제나 최산화된 설정을 유지할 수 있습니다.
+
 
 
 ## 주요 구성 및 특징
@@ -86,8 +88,11 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 <br>
 
 ### 2. EBS-CSI-Driver 설치
+**[IAM Role 생성]**
 
+**[EBS-CSI-Driver 설치]**
 
+---
 <br><br>
 
 ## ArgoCD 
@@ -114,11 +119,18 @@ data:
   accounts.devops: apiKey,login</pre>
 - admin 계정으로는 token 생성이 불가능하기 때문에 별도의 유저 계정 새성
 
+**[repository 연결]**
 
 
-
+**[application 등록]**
 
 ---
+## CI|CD 파이프라인 등록
+**[git_repo 생성&Secret 등록]**
+
+**[ECR_repo 생성]**
+
+**[git push]**
 
 ### ALB  
 <img src="images/ALB.png" alt="ALB" width="600"/>  
