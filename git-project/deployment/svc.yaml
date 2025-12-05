@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: wep-app-service
+  name: web-app-service
 spec:
   type: ClusterIP
   selector:
