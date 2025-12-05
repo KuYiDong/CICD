@@ -40,29 +40,6 @@
 <br><br>
 
 
-## Terraform 구성 파일
-
-- **modules/**  
-  재사용 가능한 Terraform 모듈들이 위치한 폴더입니다.  
-  - **web_alb/**: 외부용 Application Load Balancer(ALB) 구성을 담당합니다.
-  - **was_alb/**: 내부용 Application Load Balancer(ALB) 구성을 담당합니다. 
-  - **front_asg/**: Auto Scaling Group 및 Launch Template 관련 리소스를 관리합니다.
-  - **back_asg/**: Auto Scaling Group 및 Launch Template 관련 리소스를 관리합니다. 
-  - **RDS/**: RDS 인스턴스 및 클러스터를 구성합니다.  
-  - **security-group/**: 웹, 앱, 데이터베이스 계층별 보안 그룹(Security Group)을 정의합니다.
-
-- **envs/**  
-  실제 배포 환경별 설정을 관리하는 디렉토리입니다.  
-  - **prod/**: 운영 환경에 대한 설정을 포함하며, 여기서 전체 인프라 구성이 이뤄집니다.  
-    - **main.tf**: VPC, 서브넷, 인터넷 게이트웨이(IGW), NAT 게이트웨이 등 네트워크 리소스를 정의합니다. 위의 모듈들을 불러와 전체 인프라를 구성하는 메인 Terraform 파일입니다.  
-    - **variables.tf**: 운영 환경에서 사용할 변수들을 정의합니다.  
-    - **outputs.tf**: 배포 완료 후 출력할 정보(예: ALB DNS, RDS 엔드포인트 등)를 정의합니다.  
-  
-- **provider.tf**  
-  AWS 프로바이더를 설정하고, 기본 리전(region) 등 공통 프로바이더 설정을 정의하는 파일입니다.
-<br><br>
-
-
 ### Terraform을 사용하여 인프라 배포
 <pre>terraform init 
 terraform plan 
@@ -71,35 +48,43 @@ terraform apply </pre>
 
 <br><br>
 
-## AWS 리소스
-### VPC  
-**[리소스 맵]**  
-<br>
-<img src="images/vpc_리소스맵.png" alt="리소스맵" width="800"/>  
-<br><br>
+## ALB-Controller & EBS-CSI-Driver
+### DNS 연
+<pre>aws eks --region ap-northeast-2 update-kubeconfig --name $Cluster </pre>
+### ALB Controller용 IAM Policy 생성
+<pre>curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.14.1/docs/install/iam_policy.json
 
-**[서브넷]**  
-<br>
-<img src="images/Subnet.png" alt="서브넷" width="800"/>  
+
+aws iam create-policy \
+  --policy-name AWSLoadBalancerControllerIAMPolicy \
+  --policy-document file://iam_policy.json </pre>
+### IAM ServiceAccount 생성
+<pre>eksctl utils associate-iam-oidc-provider --cluster $Cluster --approve
+
+eksctl create iamserviceaccount \
+  --cluster=$Cluster \
+  --namespace=kube-system \
+  --name=aws-load-balancer-controller \
+  --role-name AmazonEKSLoadBalancerControllerRole \
+  --attach-policy-arn=arn:aws:iam::$Account:policy/AWSLoadBalancerControllerIAMPolicy \
+  --approve</pre>
+### 확인
+<pre>kubectl get sa aws-load-balancer-controller -n kube-system -o yaml | grep role-arn</pre>
+
+### AWS-Controller 설치
+<pre>helm repo add eks https://aws.github.io/eks-charts
+helm repo update
+
+helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
+  -n kube-system \
+  --set clusterName=$Cluster \
+  --set serviceAccount.create=false \
+  --set serviceAccount.name=aws-load-balancer-controller \
+  --set region=ap-northeast-2 \
+  --set vpcId=$(aws eks describe-cluster --name $Cluster --query "cluster.resourcesVpcConfig.vpcId" --output text)
+</pre>
 <br>
 
-- **총 8개 서브넷**
-  - 퍼블릭 서브넷 2개
-  - 프라이빗 서브넷 6개
-    - WAS & WEB 서브넷 4개
-    - Database 서브넷 2개
-<br>
-
-### 보안 그룹
-
-| 보안 그룹 이름    | 인바운드 포트 | 출발지        | 목적                    |
-|------------------|----------------|----------------|-------------------------|
-| **bastion_host** | 22 (SSH)       | `0.0.0.0/0`    | 외부에서 Bastion으로 SSH 접속 |
-| **ext_alb_sg**   | 80, 443        | `0.0.0.0/0`    | 외부 사용자용 ALB       |
-| **web_sg**       | 80             | `ext_alb_sg`   | ALB → Web 서버           |
-| **int_alb_sg**   | 8080           | `web_sg`       | Web → 내부 ALB          |
-| **was_sg**       | 8080           | `int_alb_sg`   | 내부 ALB → WAS 서버      |
-| **db_sg**        | 3306           | `was_sg`       | WAS 서버 → RDS DB       |
 
 
 <br><br>
