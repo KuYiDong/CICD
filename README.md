@@ -12,6 +12,8 @@ Infrastructure as Code(IaC)를 통하여 인프라를 코드 형식으로 관리
 
 해당 프로젝트는 전체 자동화 구성이 아니기에 반드시 Read.me을 참고하여 Argocd 및 기타 리소스에 대한 설정을 하셔야 합니다.
 
+<br><br>
+
 ## 주요 구성 및 특징
 
 ### 1. 인프라 자동화 (Terraform)
