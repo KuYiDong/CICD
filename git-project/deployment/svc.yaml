@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: test-nginx
+  name: wep-app-service
 spec:
   type: ClusterIP
   selector:
-    app: test-nginx
+    app: web-app-service
   ports:
     - port: 80
       targetPort: 80
