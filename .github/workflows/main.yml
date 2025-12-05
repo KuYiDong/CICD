@@ -1,60 +1,57 @@
-name: CI-CD
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+      # 1️⃣ 코드 체크아웃
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v2
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ap-northeast-2
+      # 2️⃣ AWS Credentials 설정
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
+      # 3️⃣ AWS ECR 로그인
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Build Docker image
-      run: |
-        docker build -t web-app:latest .
+      # 4️⃣ Docker 이미지 빌드
+      - name: Build Docker image
+        run: |
+          docker build -t web-app:latest .
 
-    - name: Tag image
-      run: |
-        docker tag web-app:latest ${{ steps.login-ecr.outputs.registry }}/default/web-app:latest
+      # 5️⃣ Docker 이미지 태그
+      - name: Tag image
+        run: |
+          docker tag web-app:latest ${{ steps.login-ecr.outputs.registry }}/default/web-app:latest
 
-    - name: Push to ECR
-      run: |
-        docker push ${{ steps.login-ecr.outputs.registry }}/default/web-app:latest
+      # 6️⃣ Docker 이미지 ECR push
+      - name: Push Docker image to ECR
+        run: |
+          docker push ${{ steps.login-ecr.outputs.registry }}/default/web-app:latest
 
-    - name: Update image in deployment yaml
-      run: |
-        sed -i "s|image: .*|image: ${{ steps.login-ecr.outputs.registry }}/default/web-app:latest|g" deployment/deployment.yaml
+      # 7️⃣ deployment.yaml 이미지 태그 업데이트
+      - name: Update image in deployment.yaml
+        run: |
+          sed -i "s|image: .*|image: ${{ steps.login-ecr.outputs.registry }}/default/web-app:latest|g" deployment/deployment.yaml
 
-    - name: Commit updated manifest
-      run: |
-        git config --local user.name "github-actions"
-        git config --local user.email "github-actions@github.com"
-        git add deployment/deployment.yaml
-        git commit -m "Update image tag" || echo "No changes to commit"
+      # 8️⃣ 변경사항 커밋
+      - name: Commit updated manifest
+        run: |
+          git config --local user.name "github-actions"
+          git config --local user.email "github-actions@github.com"
+          git add deployment/deployment.yaml
+          git commit -m "Update image tag" || echo "No changes to commit"
 
-    - name: Push changes
-      uses: ad-m/github-push-action@v0.8.0
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: main
-
-    - name: ArgoCD Sync
-      run: |
-        curl -X POST \
-          -H "Authorization: Bearer ${{ secrets.ARGO_TOKEN }}" \
-          -H "Content-Type: application/json" \
-          https://<ARGOCD_SERVER_URL>/api/v1/applications/test/sync
+      # 9️⃣ 변경사항 push
