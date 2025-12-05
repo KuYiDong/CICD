@@ -4,7 +4,6 @@ metadata:
   name: nginx-alb-ingress 
   namespace: default
   annotations:
-    kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/group.name: my-group
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80},{"HTTPS":443}]'
@@ -13,6 +12,7 @@ metadata:
     alb.ingress.kubernetes.io/ssl-redirect: "443"
 
 spec:
+  ingressClassName: alb
   rules:
     - host: web.yunsang.cloud
       http:
