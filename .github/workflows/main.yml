@@ -7,12 +7,14 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    environment: production   # ← 여기에 Environment 이름 지정
+    environment: production
 
     steps:
+      # 1️⃣ Checkout
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # 2️⃣ AWS Credentials
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -20,36 +22,50 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
+      # 3️⃣ AWS ECR login
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
+      # 4️⃣ Docker build
       - name: Build Docker image
-        run: docker build -t web-app:latest .
-
-      - name: Tag image
-        run: docker tag web-app:latest ${{ steps.login-ecr.outputs.registry }}/default/web-app:latest
-
-      - name: Push Docker image to ECR
-        run: docker push ${{ steps.login-ecr.outputs.registry }}/default/web-app:latest
-
-      - name: Update deployment.yaml image
         run: |
-          sed -i "s|image: .*|image: ${{ steps.login-ecr.outputs.registry }}/default/web-app:latest|g" deployment/deployment.yaml
+          cd git-project
+          docker build -t web-app:latest .
 
+      # 5️⃣ Docker tag
+      - name: Tag Docker image
+        run: |
+          cd git-project
+          docker tag web-app:latest ${{ steps.login-ecr.outputs.registry }}/default/web-app:latest
+
+      # 6️⃣ Docker push
+      - name: Push Docker image
+        run: |
+          cd git-project
+          docker push ${{ steps.login-ecr.outputs.registry }}/default/web-app:latest
+
+      # 7️⃣ Update deployment.yaml
+      - name: Update deployment image
+        run: |
+          sed -i "s|image: .*|image: ${{ steps.login-ecr.outputs.registry }}/default/web-app:latest|g" git-project/deployment/deployment.yaml
+
+      # 8️⃣ Commit updated manifest
       - name: Commit updated manifest
         run: |
           git config --local user.name "github-actions"
           git config --local user.email "github-actions@github.com"
-          git add deployment/deployment.yaml
+          git add git-project/deployment/deployment.yaml
           git commit -m "Update image tag" || echo "No changes to commit"
 
+      # 9️⃣ Push changes
       - name: Push changes
         uses: ad-m/github-push-action@v0.8.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main
 
+      # 🔟 ArgoCD sync
       - name: ArgoCD Sync
         run: |
           curl -X POST \
