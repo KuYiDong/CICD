@@ -112,7 +112,7 @@ data:
 apiVersion: v1
 data:
   accounts.devops: apiKey,login</pre>
-- adim 계정으로는 token 생성이 불가능하기 때문에 별도의 유저 계정 새성
+- admin 계정으로는 token 생성이 불가능하기 때문에 별도의 유저 계정 새성
 
 
 
