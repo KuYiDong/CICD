@@ -15,8 +15,6 @@ spec:
       labels:
         app: nginx-deploy
     spec:
-      nodeSelector:
-        role: web
       containers:
         - name: nginx
           image: 182624914879.dkr.ecr.ap-northeast-2.amazonaws.com/default/web-app:latest
