@@ -119,9 +119,22 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 <img src="image/IAM_Role 생성.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
 <br><br>
 
+**[신뢰 관계 정책 수정]**
+
+<img src="image/신뢰관계정책 설정.png.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
+
+<pre>aud": "sts.amazonaws.com" 
+# 위와 같이 써있는 곳을 찾아 아래와 같이 수정을 한다
+
+sub": "system:serviceaccount:kube-system:ebs-csi-controller-sa"</pre>
+
+ 
+<br><br>
+
+
 **[EBS-CSI-Driver 설치]**
 
-<img src="EBS-CSI-Driver 생성.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
+<img src="image/EBS-CSI-Driver 생성.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
 
 ---
 <br><br>
@@ -132,6 +145,7 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 - repodsitory 내의 **파일이 없는 경우** Argocd에서 인식할 수 없기에 반드시 먼저 `git pull` 한 프로젝트를 다시 본인 계정의 repo로 `git push` 하셔야 합니다.
 
 ### 3.2 ECR repository 생성
+<img src="image/ecr_repo.png 생성.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
 
 ### 3.2 Argocd 설치 
 
