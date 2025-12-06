@@ -12,11 +12,12 @@ Infrastructure as Code(IaC)를 통하여 인프라를 코드 형식으로 관리
 
 해당 프로젝트는 전체 자동화 구성이 아니기에 반드시 Read.me을 참고하여 Argocd 및 기타 리소스에 대한 설정을 하셔야 합니다.
 
+<br><br>
 **디렉토리 구성 요소**
-- Web_app_CI_CD/ : nginx을 기반 Deployment로 argocd와 연동하여 CI|CD 파이프라인으로 구축되는 디렉토리
-- ingress/ : ALB와 연동하여 사용하는 Argocd와 Monitoring의 Ingress 
-- kube-prometheus-stack/ : Helm 기반의 prometheus-stack
-- terraform_project/ : VPC 및 라우팅 구성과 eks기반 클러스터 Terraform Code
+- **Web_app_CI_CD/** : nginx을 기반 Deployment로 argocd와 연동하여 CI|CD 파이프라인으로 구축되는 디렉토리
+- **ingress/** : ALB와 연동하여 사용하는 Argocd와 Monitoring의 Ingress 
+- **kube-prometheus-stack/** : Helm 기반의 prometheus-stack
+- **terraform_project/** : VPC 및 라우팅 구성과 eks기반 클러스터 Terraform Code
 
 <br><br>
 
