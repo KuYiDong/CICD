@@ -104,7 +104,10 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 필수 수정 사항 
 1. `argocd argocd-cmd-params-cm` Configmaps insecure 수정
 2. `argocd-cm`에서 토큰용 사용자 추가
-<pre>helm install argocd argo/argo-cd -n argocd</pre>
+<pre>helm repo add argo https://argoproj.github.io/argo-helm
+helm repo update
+
+helm install argocd argo/argo-cd -n argocd </pre>
 
 **[HTTPS 비활성화]**
 <pre>k edit configmaps -n argocd argocd-cmd-params-cm
