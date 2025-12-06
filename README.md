@@ -98,7 +98,8 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 
 ### 2. EBS-CSI-Driver 설치
 **[IAM Role 생성]**
-<img src="images/IAM_Role 생성.png" alt="EBS" width="600"/>  
+
+<img src="image/IAM_Role 생성.png" alt="EBS" width="600"/>  
 <br><br>
 **[EBS-CSI-Driver 설치]**
 
