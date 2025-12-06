@@ -26,6 +26,7 @@ Infrastructure as Code(IaC)를 통하여 인프라를 코드 형식으로 관리
 ### 1. Terraform 실행 
 - VPC, 서브넷, 라우팅 등 기본 네트워크 환경과 EKS 클러스터를 Terraform 코드 기반으로 자동 배포 
 <br>
+
 ### 2. ALB-Controller & EBS-CSI-Driver
 **2.1 ALB-Controller 설치**
  - 정책 및 역할 생성
@@ -35,6 +36,7 @@ Infrastructure as Code(IaC)를 통하여 인프라를 코드 형식으로 관리
  - 정책 및 역할 생성
  - 추가 기능을 활용하여 EBS-CSI-Driver 설치
 <br>
+
 ### 3. CI|CD 파이프 라인 구축 
 **3.1 git repo 생성 및 설정**
 - repo 생성
@@ -47,12 +49,17 @@ Infrastructure as Code(IaC)를 통하여 인프라를 코드 형식으로 관리
 
 **3.3 Argocd 설치**
 - helm을 통한 argocd 설치
+- ingress 연결
 - Https 비활성화 진행 
 - git repository와 연결 
-- APPlication 등록 
-<br>
-### 4. Monitoring 
+- APPlication 등록
 
+<br>
+
+### 4. Monitoring 
+- helm을 통한 Grafana, Promethus, AlertManager 설치
+- ingress 연결 
+  
 <br><br>
 
 
