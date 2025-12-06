@@ -58,8 +58,8 @@ Infrastructure as Code(IaC)를 통하여 인프라를 코드 형식으로 관리
 
 <br><br>
 
-## 1. ALB-Controller & EBS-CSI-Driver
-### 1.1 ALB-Controller 설치
+## 2. ALB-Controller & EBS-CSI-Driver
+### 2.1 ALB-Controller 설치
 **[DNS 연]**
 <pre>aws eks --region ap-northeast-2 update-kubeconfig --name $Cluster </pre>
 **[ALB Controller용 IAM Policy 생성]**
@@ -98,7 +98,8 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 
 ### 2. EBS-CSI-Driver 설치
 **[IAM Role 생성]**
-
+<img src="images/IAM_Role 생성.png" alt="EBS" width="600"/>  
+<br><br>
 **[EBS-CSI-Driver 설치]**
 
 ---
