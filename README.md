@@ -116,12 +116,12 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 ### 2.2 EBS-CSI-Driver 설치
 **[IAM Role 생성]**
 
-<img src="image/IAM_Role 생성.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
+<img src="image/IAM_Role 생성.png" alt="설명" width="700" style="border: 10px solid black; border-radius: 5px;">
 <br><br>
 
 **[신뢰 관계 정책 수정]**
 
-<img src="image/신뢰관계정책 설정.png.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
+<img src="image/신뢰관계정책 설정.png" alt="설명" width="700" style="border: 10px solid black; border-radius: 5px;">
 
 <pre>aud": "sts.amazonaws.com" 
 # 위와 같이 써있는 곳을 찾아 아래와 같이 수정을 한다
@@ -134,7 +134,7 @@ sub": "system:serviceaccount:kube-system:ebs-csi-controller-sa"</pre>
 
 **[EBS-CSI-Driver 설치]**
 
-<img src="image/EBS-CSI-Driver 생성.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
+<img src="image/EBS-CSI-Driver 생성.png" alt="설명" width="700" style="border: 10px solid black; border-radius: 5px;">
 
 ---
 <br><br>
