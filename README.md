@@ -78,13 +78,16 @@ Infrastructure as Code(IaC)를 통하여 인프라를 코드 형식으로 관리
 ### 2.1 ALB-Controller 설치
 **[DNS 연]**
 <pre>aws eks --region ap-northeast-2 update-kubeconfig --name $Cluster </pre>
+<br>
+
 **[ALB Controller용 IAM Policy 생성]**
 <pre>curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.14.1/docs/install/iam_policy.json
-
 
 aws iam create-policy \
   --policy-name AWSLoadBalancerControllerIAMPolicy \
   --policy-document file://iam_policy.json </pre>
+<br>
+
 **[IAM ServiceAccount 생성]**
 <pre>eksctl utils associate-iam-oidc-provider --cluster $Cluster --approve
 
@@ -95,9 +98,11 @@ eksctl create iamserviceaccount \
   --role-name AmazonEKSLoadBalancerControllerRole \
   --attach-policy-arn=arn:aws:iam::$Account:policy/AWSLoadBalancerControllerIAMPolicy \
   --approve</pre>
+<br>
   
 **[생성 확인]**
 <pre>kubectl get sa aws-load-balancer-controller -n kube-system -o yaml | grep role-arn</pre>
+<br>
 
 **[AWS-Controller 설치]**
 <pre>helm repo add eks https://aws.github.io/eks-charts
@@ -143,10 +148,12 @@ sub": "system:serviceaccount:kube-system:ebs-csi-controller-sa"</pre>
 
 - 본인의 github 계정에서 프로젝트로 사용할 repository를 생성합니다.
 - repodsitory 내의 **파일이 없는 경우** Argocd에서 인식할 수 없기에 반드시 먼저 `git pull` 한 프로젝트를 다시 본인 계정의 repo로 `git push` 하셔야 합니다.
+<br>
 
 ### 3.2 ECR repository 생성
 <img src="image/ecr_repo.png 생성.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
 - 코드가 GitHub에 올라가면 Actions가 Docker 이미지를 빌드해 ECR에 올리고, ArgoCD가 Git 레포를 감시해 Kubernetes 클러스터에 자동 배포한다.
+<br>
 
 ### 3.2 Argocd 설치 
 
