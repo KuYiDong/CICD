@@ -146,6 +146,11 @@ sub": "system:serviceaccount:kube-system:ebs-csi-controller-sa"</pre>
 
 ### 3.2 ECR repository 생성
 <img src="image/ecr_repo.png 생성.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
+- 코드가 GitHub에 올라가면 Actions가 Docker 이미지를 빌드해 ECR에 올리고, ArgoCD가 Git 레포를 감시해 Kubernetes 클러스터에 자동 배포한다.
 
 ### 3.2 Argocd 설치 
 
+<pre>helm repo add argo https://argoproj.github.io/argo-helm
+helm repo update
+
+helm install argocd argo/argo-cd -n argocd </pre>
