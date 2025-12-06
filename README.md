@@ -16,6 +16,8 @@ Infrastructure as Code(IaC)를 통하여 인프라를 코드 형식으로 관리
 
 ## 주요 구성 절차
 
+## 주요 구성 절차
+
 ### 1. Terraform 실행 
 - VPC, 서브넷, 라우팅 등 기본 네트워크 환경과 EKS 클러스터를 Terraform 코드 기반으로 자동 배포 
 
@@ -23,22 +25,26 @@ Infrastructure as Code(IaC)를 통하여 인프라를 코드 형식으로 관리
 2.1 ALB-Controller 설치
  - 정책 및 역할 생성
  - 서비스 어카운트 생성
+
 2.2 EBS-CSI-Driver
  - 정책 및 역할 생성
  - 추가 기능을 활용하여 EBS-CSI-Driver 설치
 
+### 3. CI|CD 파이프 라인 구축 
+3.1 git repo 생성 및 설정
+- repo 생성
+- AWS Access_key 및 기타 Secret 정보 등록
+ - Dockerfile 생성 및 디렉토리 구성
+- Action Workflow 생성
 
-### 3. Argocd 설치 및 설정
-3.1 helm insatll 진행
-3.2 repository & Application 연결 
+3.2 ECR repository 생성
+- repository 생성
 
-
-
-## 프로젝트 장점
-- **Infrastructure as Code(IaC)**: 재현 가능한 인프라 구축 가능
-- **GitOps 기반 관리**: 배포 및 업데이트 과정의 투명성 확보, 버전 관리 용이
-- **자동화와 모니터링 통합**: 인프라와 애플리케이션 관리 효율 극대화
-- **운영 안정성 향상**: 외부 접속, 스토리지, 알람 체계가 통합 관리되어 장애 대응 속도 향상
+3.2 Argocd 설치
+- helm을 통한 argocd 설치
+- Https 비활성화 진행 
+- git repository와 연결 
+- APPlication 등록 
 
 <br><br>
 
