@@ -146,17 +146,29 @@ sub": "system:serviceaccount:kube-system:ebs-csi-controller-sa"</pre>
 ## 3. CI|CD 파이프라인 등록
 ### 3.1 git repository 생성 및 설정
 
+**[repository 추가]**
 - 본인의 github 계정에서 프로젝트로 사용할 repository를 생성합니다.
 - repodsitory 내의 **파일이 없는 경우** Argocd에서 인식할 수 없기에 반드시 먼저 `git pull` 한 프로젝트를 다시 본인 계정의 repo로 `git push` 하셔야 합니다.
 <br>
 
+**[Secret 추가]**
+<img src="image/Git_Secret.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
+- GitHub Actions가 AWS에 접근해 ECR에 이미지 올리거나 클러스터를 관리하려면 AWS 인증 정보가 필요해서 Secret으로 저장한다.
+<br>
+
+**[Action WorkFlows 등록]**
+- .github/workflow 하단의 main.yml 파일은 Action WorkFlows 파일이다.
+-  github repositroy(본인의 생성한 repo) -> Action에서 `set up a workflow yourself`을 클릭하여 main.yml안에 내용을 등록한다.
+-  main.yml에서 https://<argocd-url>/api/v1/applications/test/sync `<argocd-url>` 본인이 지정한 url으로 변경한다.
+<br>
+
 ### 3.2 ECR repository 생성
-<img src="image/ecr_repo.png 생성.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
+<img src="image/ecr_repo.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
 - 코드가 GitHub에 올라가면 Actions가 Docker 이미지를 빌드해 ECR에 올리고, ArgoCD가 Git 레포를 감시해 Kubernetes 클러스터에 자동 배포한다.
 <br>
 
 ### 3.2 Argocd 설치 
-
+**[Arfocd]**
 <pre>helm repo add argo https://argoproj.github.io/argo-helm
 helm repo update
 
