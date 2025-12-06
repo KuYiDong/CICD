@@ -17,7 +17,7 @@ Infrastructure as Code(IaC)를 통하여 인프라를 코드 형식으로 관리
 - **Web_app_CI_CD/** : nginx을 기반 Deployment로 argocd와 연동하여 CI|CD 파이프라인으로 구축되는 디렉토리
 - **ingress/** : ALB와 연동하여 사용하는 Argocd와 Monitoring의 Ingress 
 - **kube-prometheus-stack/** : Helm 기반의 prometheus-stack
-- **terraform_project/** : VPC 및 라우팅 구성과 eks기반 클러스터 Terraform Code
+- **terraform_project/** : VPC 및 라우팅 구성과 eks기반 클러스터 `Terraform Code`
 
 <br><br>
 
@@ -95,6 +95,7 @@ eksctl create iamserviceaccount \
   --role-name AmazonEKSLoadBalancerControllerRole \
   --attach-policy-arn=arn:aws:iam::$Account:policy/AWSLoadBalancerControllerIAMPolicy \
   --approve</pre>
+  
 **[생성 확인]**
 <pre>kubectl get sa aws-load-balancer-controller -n kube-system -o yaml | grep role-arn</pre>
 
@@ -126,6 +127,9 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 <br><br>
 ## 3. CI|CD 파이프라인 등록
 ### 3.1 git repository 생성 및 설정
+
+- 본인의 github 계정에서 프로젝트로 사용할 repository를 생성합니다.
+- repodsitory 내의 **파일이 없는 경우** Argocd에서 인식할 수 없기에 반드시 먼저 `git pull` 한 프로젝트를 다시 본인 계정의 repo로 `git push` 하셔야 합니다.
 
 ### 3.2 ECR repository 생성
 
