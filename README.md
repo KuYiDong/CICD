@@ -1,93 +1,71 @@
-
 # AWS 인프라 & CI/CD 프로젝트 포트폴리오
-![이미지 추가](images/3tier-아키텍쳐.png)
 
+![아키텍처 이미지](images/3tier-아키텍쳐.png)
 
-## 개요
-# 프로젝트 개요
+------------------------------------------------------------------------
 
-해당 프로젝트는 Terraform과 ArgoCD를 활용하여 클라우드 환경에서 Kubernetes(EKS) 기반 인프라를 자동으로 구축하고, CI/CD 및 모니터링까지 통합 관리하는 프로젝트입니다.
+## 📌 프로젝트 개요
 
-Infrastructure as Code(IaC)를 통하여 인프라를 코드 형식으로 관리하며 자동화를 통하여 인프라를 배포합니다. GitOps 기반 관리릂통하여 배포 및 업데이트 과정의 투명성 확보하며 버전 관리 용이해집니다.Grafana와 Prometheus를 통해 쿠버네티스 내의 서비스 상태와 성능을 실시간으로 모니터링하며 CI/CD 파이프라인을 통해 개발자가 Git에 Push 하면 GitHub Actions가 이미지를 빌드 후 ECR에 Push 및 감지를 통해 실시간으로 변동 사항을 감지하여 언제나 최산화된 설정을 유지할 수 있습니다.
+본 프로젝트는 **Terraform**, **Amazon EKS**, **ArgoCD**, **GitHub
+Actions**, **Prometheus/Grafana**를 활용해\
+**완전 자동화된 Kubernetes 기반 클라우드 인프라 & CI/CD 환경**을 구축한
+내용입니다.
 
-해당 프로젝트는 전체 자동화 구성이 아니기에 반드시 Read.me을 참고하여 Argocd 및 기타 리소스에 대한 설정을 하셔야 합니다.
+### ✨ 주요 특징
 
-<br><br>
-**디렉토리 구성 요소**
-- **Web_app_CI_CD/** : nginx을 기반 Deployment로 argocd와 연동하여 CI|CD 파이프라인으로 구축되는 디렉토리
-- **ingress/** : ALB와 연동하여 사용하는 Argocd와 Monitoring의 Ingress 
-- **kube-prometheus-stack/** : Helm 기반의 prometheus-stack
-- **terraform_project/** : VPC 및 라우팅 구성과 eks기반 클러스터 `Terraform Code`
+-   **IaC(Terraform)** 로 VPC, Subnet, Routing, EKS 클러스터 전체 자동
+    구축\
+-   **GitOps(ArgoCD)** 로 지속적인 배포 자동화\
+-   **GitHub Actions → ECR → EKS** 자동 배포 파이프라인 구성\
+-   **Prometheus + Grafana** 를 통한 모니터링 환경 구축\
+-   **ALB Controller + EBS CSI Driver** 로 실 서비스 운영을 위한 AWS
+    네이티브 구성
 
-<br><br>
+⚠️ 완전 자동화가 아니므로 ArgoCD 및 일부 리소스는 README의 수동 설정
+지침을 따라 적용해야 합니다.
 
-## 주요 구성 절차
+------------------------------------------------------------------------
 
-### 1. Terraform 실행 
-- VPC, 서브넷, 라우팅 등 기본 네트워크 환경과 EKS 클러스터를 Terraform 코드 기반으로 자동 배포 
-<br>
+## 📁 디렉토리 구조
 
-### 2. ALB-Controller & EBS-CSI-Driver
-**2.1 ALB-Controller 설치**
- - 정책 및 역할 생성
- - 서비스 어카운트 생성
+  디렉토리                     설명
+  ---------------------------- --------------------------------------------
+  **Web_app_CI_CD/**           Nginx 기반 Deployment + CI/CD용 매니페스트
+  **ingress/**                 ArgoCD / Grafana / Prometheus Ingress
+  **kube-prometheus-stack/**   Helm 기반 모니터링 스택
+  **terraform_project/**       VPC, EKS 클러스터 등 Terraform 코드
 
-**2.2 EBS-CSI-Driver**
- - 정책 및 역할 생성
- - 추가 기능을 활용하여 EBS-CSI-Driver 설치
-<br>
+------------------------------------------------------------------------
 
-### 3. CI|CD 파이프 라인 구축 
-**3.1 git repo 생성 및 설정**
-- repo 생성
-- AWS Access_key 및 기타 Secret 정보 등록
- - Dockerfile 생성 및 디렉토리 구성
-- Action Workflow 생성
+# 🚀 1. Terraform 인프라 배포
 
-**3.2 ECR repository 생성**
-- repository 생성
+``` bash
+cd eks_project/terraform_project/env/prod/
+terraform init
+terraform plan
+terraform apply
+```
 
-**3.3 Argocd 설치**
-- helm을 통한 argocd 설치
-- ingress 연결
-- Https 비활성화 진행 
-- git repository와 연결 
-- APPlication 등록
+------------------------------------------------------------------------
 
-<br>
+# 🚦 2. ALB Controller & EBS CSI Driver 설치
 
-### 4. Monitoring 
-- helm을 통한 Grafana, Promethus, AlertManager 설치
-- ingress 연결 
-  
-<br><br>
+## 2.1 ALB Controller 설치
 
+### ① IAM Policy 생성
 
-## Terraform을 사용하여 인프라 배포
-
-<pre>
- yun@YUN:~/eks_project/terraform_project$ cd env/prod/
- yun@YUN:~/eks_project/terraform_project$ terraform init 
- yun@YUN:~/eks_project/terraform_project$ terraform plan 
- yun@YUN:~/eks_project/terraform_project$ terraform apply </pre>
-
-<br><br>
-
----
-
-## ALB-Controller & EBS-CSI-Driver
-###  ALB-Controller 설치
-
-**[1, ALB Controller용 IAM Policy 생성]**
-<pre>curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.14.1/docs/install/iam_policy.json
+``` bash
+curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.14.1/docs/install/iam_policy.json
 
 aws iam create-policy \
   --policy-name AWSLoadBalancerControllerIAMPolicy \
-  --policy-document file://iam_policy.json </pre>
-<br>
+  --policy-document file://iam_policy.json
+```
 
-**[2. IAM ServiceAccount 생성]**
-<pre>eksctl utils associate-iam-oidc-provider --cluster $Cluster --approve
+### ② IAM ServiceAccount 생성
+
+``` bash
+eksctl utils associate-iam-oidc-provider --cluster $Cluster --approve
 
 eksctl create iamserviceaccount \
   --cluster=$Cluster \
@@ -95,15 +73,19 @@ eksctl create iamserviceaccount \
   --name=aws-load-balancer-controller \
   --role-name AmazonEKSLoadBalancerControllerRole \
   --attach-policy-arn=arn:aws:iam::$Account:policy/AWSLoadBalancerControllerIAMPolicy \
-  --approve</pre>
-<br>
-  
-**[3. 생성 확인]**
-<pre>kubectl get sa aws-load-balancer-controller -n kube-system -o yaml | grep role-arn</pre>
-<br>
+  --approve
+```
 
-**[4. AWS-Controller 설치]**
-<pre>helm repo add eks https://aws.github.io/eks-charts
+### ③ 생성 확인
+
+``` bash
+kubectl get sa aws-load-balancer-controller -n kube-system -o yaml | grep role-arn
+```
+
+### ④ Helm 설치
+
+``` bash
+helm repo add eks https://aws.github.io/eks-charts
 helm repo update
 
 helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
@@ -113,116 +95,123 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
   --set serviceAccount.name=aws-load-balancer-controller \
   --set region=ap-northeast-2 \
   --set vpcId=$(aws eks describe-cluster --name $Cluster --query "cluster.resourcesVpcConfig.vpcId" --output text)
-</pre>
+```
 
-<br><br>
+------------------------------------------------------------------------
 
----
+## 2.2 EBS CSI Driver 설치
 
-### EBS-CSI-Driver 설치
-**[1. IAM Role 생성]**
+### ① IAM Role 생성
 
-<img src="image/IAM_Role 생성.png" alt="설명" width="900" style="border: 50px solid black; border-radius: 5px;">
-<br><br>
+*(이미지 참고)*
 
-**[2. 신뢰 관계 정책 수정]**
+### ② 신뢰관계 정책 수정
 
-<img src="image/신뢰관계정책 설정.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
+``` json
+"aud": "sts.amazonaws.com",
+"sub": "system:serviceaccount:kube-system:ebs-csi-controller-sa"
+```
 
-<pre>aud": "sts.amazonaws.com" 
-# 위와 같이 써있는 곳을 찾아 아래와 같이 수정을 한다
+### ③ EBS CSI Driver 설치
 
-sub": "system:serviceaccount:kube-system:ebs-csi-controller-sa"</pre>
+*(이미지 참고)*
 
- 
-<br><br>
+------------------------------------------------------------------------
 
+# 🔄 3. CI/CD 파이프라인 구축
 
-**[3. EBS-CSI-Driver 설치]**
+## 3.1 GitHub Repo 생성 & Secret 등록
 
-<img src="image/EBS-CSI-Driver 생성.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
+### 🔐 GitHub Secrets 추가
 
-<br><br>
+-   AWS_ACCESS_KEY_ID\
+-   AWS_SECRET_ACCESS_KEY\
+-   AWS_REGION\
+-   ECR_REPOSITORY\
+-   ARGOCD_TOKEN 등
 
----
+(이미지 참고)
 
-## CI|CD 파이프라인 등록
-### git repository 생성 및 설정
+------------------------------------------------------------------------
 
-**[1. repository 추가]**
-- 본인의 github 계정에서 프로젝트로 사용할 repository를 생성합니다.
-- repodsitory 내의 **파일이 없는 경우** Argocd에서 인식할 수 없기에 반드시 먼저 `git pull` 한 프로젝트를 다시 본인 계정의 repo로 `git push` 하셔야 합니다.
-<br>
+## 3.2 GitHub Actions Workflow 작성
 
-**[2. Secret 추가]**
-<img src="image/Git_Secret.png" alt="설명" width="800" style="border: 10px solid black; border-radius: 5px;">
-- GitHub Actions가 AWS에 접근해 ECR에 이미지 올리거나 클러스터를 관리하려면 AWS 인증 정보가 필요해서 Secret으로 저장한다.
-<br>
+`.github/workflows/main.yml` 생성\
+ArgoCD Sync URL은 본인 설정에 맞춰 변경
 
-**[3. Action WorkFlows 등록]**
-- .github/workflow 하단의 main.yml 파일은 Action WorkFlows 파일이다.
--  github repositroy(본인의 생성한 repo) -> Action에서 `set up a workflow yourself`을 클릭하여 main.yml안에 내용을 등록한다.
--  main.yml에서 https://<argocd-url>/api/v1/applications/test/sync `<argocd-url>` 본인이 지정한 url으로 변경한다.
-<br>
+    https://<argocd-url>/api/v1/applications/test/sync
 
-### ECR repository 생성
-<img src="image/ecr_repo.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
+------------------------------------------------------------------------
 
-- 코드가 GitHub에 올라가면 Actions worklow을 통해 Docker 이미지를 빌드해 ECR에 올립니다.
-- ArgoCD가 Git 레포를 감시해 Kubernetes 클러스터에 자동 배포합니다.
+## 3.3 ECR Repository 생성
 
-<br><br>
+*(이미지 참고)*
 
----
+-   GitHub Actions → Docker Build → ECR Push\
+-   ArgoCD가 Git 변경 감지 후 자동 Sync하여 배포
 
-### Argocd 설치 
-**[1. Argocd 설치]**
-<pre>helm repo add argo https://argoproj.github.io/argo-helm
+------------------------------------------------------------------------
+
+# 🎯 4. ArgoCD 설치 & 설정
+
+## ① Helm 설치
+
+``` bash
+helm repo add argo https://argoproj.github.io/argo-helm
 helm repo update
 
-helm install argocd argo/argo-cd -n argocd </pre>
-<br>
+helm install argocd argo/argo-cd -n argocd
+```
 
-**[2. ConfigMaps 수정]**
+## ② HTTPS 비활성화
 
-1. Https 비활성화
-<pre>
- k edit configmaps -n argocd argocd-cmd-params-cm
+``` bash
+kubectl edit configmap argocd-cmd-params-cm -n argocd
+```
 
-apiVersion: v1
+``` yaml
 data:
-  server.insecure: "true" #HTTPS 비활성화
-</pre>
-<br>
+  server.insecure: "true"
+```
 
-**[3. repository 및 APP 추가]**
-- repository 추가
- -  HTTPs 형식으로 진행
- -  자신의 repositroy Https 형식으로 입력
- -  github ID 및 secret Token 입력
+## ③ Repository & Application 등록
 
-- application 추가
- -  배포할 namesapce 입력
- -  해당 namesapce에 배포할 리소스 위치 경로 입력
+-   GitHub Repo(HTTPS) 연결\
+-   ID + PAT Token 입력\
+-   Application 생성 후
+    -   Namespace 지정\
+    -   매니페스트 경로 지정
 
-<br><br>
+------------------------------------------------------------------------
 
----
+# 📊 5. Monitoring (Prometheus + Grafana)
 
-### Monitoring 설치 
-**[1. Monitoring 설치]**
+## ① Helm 설치
 
-<pre>
+``` bash
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
- 
+
 helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring -f prometheus-values.yaml
+```
 
-</pre>
+※ CRD 충돌 문제 때문에 **ArgoCD로 설치 금지**\
+(반드시 직접 Helm으로 설치)
 
-- **Prometheus에 경우 CRD 파일을 설치하는 과정 중 오류가 발생하기 때문에, Argocd가 아닌 별도로 설치를 진행한다.**
+## ② Ingress 적용
 
-**[2. Ingress 실행]**
-<pre>
- k apply -f grafana-ingress.yaml
-</pre>
+``` bash
+kubectl apply -f grafana-ingress.yaml
+```
+
+------------------------------------------------------------------------
+
+# ✅ 프로젝트 마무리
+
+Terraform → EKS → GitHub Actions → ECR → ArgoCD → Monitoring\
+모든 구성이 서로 연결되는 형태로 실제 회사에서도 그대로 사용 가능한
+**Production-Level 구조**입니다.
+
+필요하면: - 아키텍처 다이어그램 다시 제작\
+- main.yml 자동 생성\
+- full infra 코드도 구성
