@@ -223,7 +223,9 @@ kubectl apply -f grafana-ingress.yaml
 
 ------------------------------------------------------------------------
 
-## 프로젝트 마무리
+<br><br>
+
+# 프로젝트 마무리
 **[git Action log]**
 
 <img src="image/WEB배포 결과.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
@@ -247,8 +249,7 @@ kubectl apply -f grafana-ingress.yaml
 <img src="image/Grafana-UI.png" alt="설명" width="500" style="border: 10px solid black; border-radius: 5px;">
 
 Terraform → EKS → GitHub Actions → ECR → ArgoCD → Monitoring\
-모든 구성이 서로 연결되는 형태로 실제 회사에서도 그대로 사용 가능한
-**Production-Level 구조**입니다.
+모든 구성이 서로 연결되는 형태로 실제 환경에서도 그대로 사용 가능한구조입니다.
 
 필요하면: - 아키텍처 다이어그램 다시 제작\
 - main.yml 자동 생성\
