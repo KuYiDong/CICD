@@ -11,7 +11,7 @@ Actions**, **Prometheus/Grafana**를 활용해\
 **완전 자동화된 Kubernetes 기반 클라우드 인프라 & CI/CD 환경**을 구축한
 내용입니다.
 
-### ✨ 주요 특징
+### 주요 특징
 
 -   **IaC(Terraform)** 로 VPC, Subnet, Routing, EKS 클러스터 전체 자동
     구축\
@@ -26,7 +26,7 @@ Actions**, **Prometheus/Grafana**를 활용해\
 
 ------------------------------------------------------------------------
 
-## 📁 디렉토리 구조
+## 디렉토리 구조
 
   디렉토리                     설명
   ---------------------------- --------------------------------------------
@@ -37,7 +37,7 @@ Actions**, **Prometheus/Grafana**를 활용해\
 
 ------------------------------------------------------------------------
 
-# 🚀 1. Terraform 인프라 배포
+# 1. Terraform 인프라 배포
 
 ``` bash
 cd eks_project/terraform_project/env/prod/
@@ -48,7 +48,7 @@ terraform apply
 
 ------------------------------------------------------------------------
 
-# 🚦 2. ALB Controller & EBS CSI Driver 설치
+# 2. ALB Controller & EBS CSI Driver 설치
 
 ## 2.1 ALB Controller 설치
 
@@ -103,9 +103,11 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 
 ### ① IAM Role 생성
 
-*(이미지 참고)*
+<img src="image/IAM_Role 생성.png" alt="설명" width="900" style="border: 50px solid black; border-radius: 5px;">
 
 ### ② 신뢰관계 정책 수정
+
+<img src="image/신뢰관계정책 설정.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
 
 ``` json
 "aud": "sts.amazonaws.com",
@@ -114,23 +116,22 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 
 ### ③ EBS CSI Driver 설치
 
-*(이미지 참고)*
+<img src="image/EBS-CSI-Driver 생성.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
+
+<br><br>
 
 ------------------------------------------------------------------------
 
-# 🔄 3. CI/CD 파이프라인 구축
+# 3. CI/CD 파이프라인 구축
 
 ## 3.1 GitHub Repo 생성 & Secret 등록
 
 ### 🔐 GitHub Secrets 추가
 
+- 아래에 항목들을 repo안에 secret으로 설정해준다
 -   AWS_ACCESS_KEY_ID\
 -   AWS_SECRET_ACCESS_KEY\
 -   AWS_REGION\
--   ECR_REPOSITORY\
--   ARGOCD_TOKEN 등
-
-(이미지 참고)
 
 ------------------------------------------------------------------------
 
@@ -145,14 +146,14 @@ ArgoCD Sync URL은 본인 설정에 맞춰 변경
 
 ## 3.3 ECR Repository 생성
 
-*(이미지 참고)*
+<img src="image/ecr_repo.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
 
 -   GitHub Actions → Docker Build → ECR Push\
 -   ArgoCD가 Git 변경 감지 후 자동 Sync하여 배포
 
 ------------------------------------------------------------------------
 
-# 🎯 4. ArgoCD 설치 & 설정
+# 4. ArgoCD 설치 & 설정
 
 ## ① Helm 설치
 
@@ -184,7 +185,7 @@ data:
 
 ------------------------------------------------------------------------
 
-# 📊 5. Monitoring (Prometheus + Grafana)
+# 5. Monitoring (Prometheus + Grafana)
 
 ## ① Helm 설치
 
