@@ -63,7 +63,7 @@ Infrastructure as Code(IaC)를 통하여 인프라를 코드 형식으로 관리
 <br><br>
 
 
-## 1. Terraform을 사용하여 인프라 배포
+## Terraform을 사용하여 인프라 배포
 
 <pre>
  yun@YUN:~/eks_project/terraform_project$ cd env/prod/
@@ -74,13 +74,10 @@ Infrastructure as Code(IaC)를 통하여 인프라를 코드 형식으로 관리
 
 <br><br>
 
-## 2. ALB-Controller & EBS-CSI-Driver
-### 2.1 ALB-Controller 설치
-**[DNS 연]**
-<pre>aws eks --region ap-northeast-2 update-kubeconfig --name $Cluster </pre>
-<br>
+## ALB-Controller & EBS-CSI-Driver
+###  ALB-Controller 설치
 
-**[ALB Controller용 IAM Policy 생성]**
+**[1, ALB Controller용 IAM Policy 생성]**
 <pre>curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.14.1/docs/install/iam_policy.json
 
 aws iam create-policy \
@@ -88,7 +85,7 @@ aws iam create-policy \
   --policy-document file://iam_policy.json </pre>
 <br>
 
-**[IAM ServiceAccount 생성]**
+**[2. IAM ServiceAccount 생성]**
 <pre>eksctl utils associate-iam-oidc-provider --cluster $Cluster --approve
 
 eksctl create iamserviceaccount \
@@ -100,11 +97,11 @@ eksctl create iamserviceaccount \
   --approve</pre>
 <br>
   
-**[생성 확인]**
+**[3. 생성 확인]**
 <pre>kubectl get sa aws-load-balancer-controller -n kube-system -o yaml | grep role-arn</pre>
 <br>
 
-**[AWS-Controller 설치]**
+**[4. AWS-Controller 설치]**
 <pre>helm repo add eks https://aws.github.io/eks-charts
 helm repo update
 
@@ -118,13 +115,13 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 </pre>
 <br><br>
 
-### 2.2 EBS-CSI-Driver 설치
-**[IAM Role 생성]**
+### EBS-CSI-Driver 설치
+**[1. IAM Role 생성]**
 
 <img src="image/IAM_Role 생성.png" alt="설명" width="900" style="border: 50px solid black; border-radius: 5px;">
 <br><br>
 
-**[신뢰 관계 정책 수정]**
+**[2. 신뢰 관계 정책 수정]**
 
 <img src="image/신뢰관계정책 설정.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
 
@@ -137,39 +134,60 @@ sub": "system:serviceaccount:kube-system:ebs-csi-controller-sa"</pre>
 <br><br>
 
 
-**[EBS-CSI-Driver 설치]**
+**[3. EBS-CSI-Driver 설치]**
 
 <img src="image/EBS-CSI-Driver 생성.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
 
 ---
 <br><br>
-## 3. CI|CD 파이프라인 등록
-### 3.1 git repository 생성 및 설정
+## CI|CD 파이프라인 등록
+### git repository 생성 및 설정
 
-**[repository 추가]**
+**[1. repository 추가]**
 - 본인의 github 계정에서 프로젝트로 사용할 repository를 생성합니다.
 - repodsitory 내의 **파일이 없는 경우** Argocd에서 인식할 수 없기에 반드시 먼저 `git pull` 한 프로젝트를 다시 본인 계정의 repo로 `git push` 하셔야 합니다.
 <br>
 
-**[Secret 추가]**
+**[2. Secret 추가]**
 <img src="image/Git_Secret.png" alt="설명" width="800" style="border: 10px solid black; border-radius: 5px;">
 - GitHub Actions가 AWS에 접근해 ECR에 이미지 올리거나 클러스터를 관리하려면 AWS 인증 정보가 필요해서 Secret으로 저장한다.
 <br>
 
-**[Action WorkFlows 등록]**
+**[3. Action WorkFlows 등록]**
 - .github/workflow 하단의 main.yml 파일은 Action WorkFlows 파일이다.
 -  github repositroy(본인의 생성한 repo) -> Action에서 `set up a workflow yourself`을 클릭하여 main.yml안에 내용을 등록한다.
 -  main.yml에서 https://<argocd-url>/api/v1/applications/test/sync `<argocd-url>` 본인이 지정한 url으로 변경한다.
 <br>
 
-### 3.2 ECR repository 생성
+### ECR repository 생성
 <img src="image/ecr_repo.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
-- 코드가 GitHub에 올라가면 Actions가 Docker 이미지를 빌드해 ECR에 올리고, ArgoCD가 Git 레포를 감시해 Kubernetes 클러스터에 자동 배포한다.
+
+- 코드가 GitHub에 올라가면 Actions worklow을 통해 Docker 이미지를 빌드해 ECR에 올립니다.
+- ArgoCD가 Git 레포를 감시해 Kubernetes 클러스터에 자동 배포합니다.
+
 <br>
 
-### 3.2 Argocd 설치 
-**[Arfocd]**
+### Argocd 설치 
+**[1. Argocd 설치]**
 <pre>helm repo add argo https://argoproj.github.io/argo-helm
 helm repo update
 
 helm install argocd argo/argo-cd -n argocd </pre>
+<br>
+
+**[2. ConfigMaps 수정]**
+
+1. Https 비활성화
+<pre>
+ k edit configmaps -n argocd argocd-cmd-params-cm
+
+apiVersion: v1
+data:
+  server.insecure: "true" #HTTPS 비활성화
+</pre>
+<br>
+
+**[3. repository 추가]**
+<img src="image/Argocd_monitoring_app_conf_1.png" alt="설명" width="800" style="border: 10px solid black; border-radius: 5px;">
+<img src="image/Argocd_monitoring_app_conf_2.png" alt="설명" width="800" style="border: 10px solid black; border-radius: 5px;">
+
