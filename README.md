@@ -38,9 +38,14 @@ Actions**, **Prometheus/Grafana**를 활용해\
 
 ------------------------------------------------------------------------
 
+
+# 1. Steb By Step
+
+---
+
 <br><br>
 
-# 1. Terraform 인프라 배포
+## 1. Terraform 인프라 배포
 
 ``` bash
 cd eks_project/terraform_project/env/prod/
@@ -53,9 +58,9 @@ terraform apply
 
 <br><br>
 
-# 2. ALB Controller & EBS CSI Driver 설치
+## 2. ALB Controller & EBS CSI Driver 설치
 
-## 2.1 ALB Controller 설치
+### 2.1 ALB Controller 설치
 
 ### ① IAM Policy 생성
 
@@ -104,7 +109,7 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 
 ------------------------------------------------------------------------
 
-## 2.2 EBS CSI Driver 설치
+### 2.2 EBS CSI Driver 설치
 
 ### ① IAM Role 생성
 
@@ -126,9 +131,9 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 ------------------------------------------------------------------------
 <br><br>
 
-# 3. CI/CD 파이프라인 구축
+## 3. CI/CD 파이프라인 구축
 
-## 3.1 GitHub Repo 생성 & Secret 등록
+### 3.1 GitHub Repo 생성 & Secret 등록
 
 ### 🔐 GitHub Secrets 추가
 
@@ -139,7 +144,7 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 
 ------------------------------------------------------------------------
 
-## 3.2 GitHub Actions Workflow 작성
+### 3.2 GitHub Actions Workflow 작성
 
 `.github/workflows/main.yml` 생성\
 ArgoCD Sync URL은 본인 설정에 맞춰 변경
@@ -148,7 +153,7 @@ ArgoCD Sync URL은 본인 설정에 맞춰 변경
 
 ------------------------------------------------------------------------
 
-## 3.3 ECR Repository 생성
+### 3.3 ECR Repository 생성
 
 <img src="image/ecr_repo.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
 
@@ -158,9 +163,9 @@ ArgoCD Sync URL은 본인 설정에 맞춰 변경
 ------------------------------------------------------------------------
 <br><br>
 
-# 4. ArgoCD 설치 & 설정
+## 4. ArgoCD 설치 & 설정
 
-## ① Helm 설치
+### ① Helm 설치
 
 ``` bash
 helm repo add argo https://argoproj.github.io/argo-helm
@@ -169,7 +174,7 @@ helm repo update
 helm install argocd argo/argo-cd -n argocd
 ```
 
-## ② HTTPS 비활성화
+### ② HTTPS 비활성화
 
 ``` bash
 kubectl edit configmap argocd-cmd-params-cm -n argocd
@@ -180,7 +185,7 @@ data:
   server.insecure: "true"
 ```
 
-## ③ Repository & Application 등록
+### ③ Repository & Application 등록
 
 -   GitHub Repo(HTTPS) 연결\
 -   ID + PAT Token 입력\
@@ -192,9 +197,9 @@ data:
 
 <br><br>
 
-# 5. Monitoring (Prometheus + Grafana)
+## 5. Monitoring (Prometheus + Grafana)
 
-## ① Helm 설치
+### ① Helm 설치
 
 ``` bash
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
@@ -206,7 +211,7 @@ helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring
 ※ CRD 충돌 문제 때문에 **ArgoCD로 설치 금지**\
 (반드시 직접 Helm으로 설치)
 
-## ② Ingress 적용
+### ② Ingress 적용
 
 ``` bash
 kubectl apply -f grafana-ingress.yaml
@@ -214,7 +219,7 @@ kubectl apply -f grafana-ingress.yaml
 
 ------------------------------------------------------------------------
 
-# 프로젝트 마무리
+## 프로젝트 마무리
 
 Terraform → EKS → GitHub Actions → ECR → ArgoCD → Monitoring\
 모든 구성이 서로 연결되는 형태로 실제 회사에서도 그대로 사용 가능한
