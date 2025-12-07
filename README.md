@@ -37,6 +37,8 @@ Actions**, **Prometheus/Grafana**를 활용해\
 
 ------------------------------------------------------------------------
 
+<br><br>
+
 # 1. Terraform 인프라 배포
 
 ``` bash
@@ -47,6 +49,8 @@ terraform apply
 ```
 
 ------------------------------------------------------------------------
+
+<br><br>
 
 # 2. ALB Controller & EBS CSI Driver 설치
 
@@ -118,9 +122,8 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 
 <img src="image/EBS-CSI-Driver 생성.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
 
-<br><br>
-
 ------------------------------------------------------------------------
+<br><br>
 
 # 3. CI/CD 파이프라인 구축
 
@@ -152,6 +155,7 @@ ArgoCD Sync URL은 본인 설정에 맞춰 변경
 -   ArgoCD가 Git 변경 감지 후 자동 Sync하여 배포
 
 ------------------------------------------------------------------------
+<br><br>
 
 # 4. ArgoCD 설치 & 설정
 
@@ -184,6 +188,8 @@ data:
     -   매니페스트 경로 지정
 
 ------------------------------------------------------------------------
+
+<br><br>
 
 # 5. Monitoring (Prometheus + Grafana)
 
