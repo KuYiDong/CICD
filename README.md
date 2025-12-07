@@ -1,6 +1,6 @@
 # AWS 인프라 & CI/CD 프로젝트 포트폴리오
 
-![아키텍처 이미지](images/3tier-아키텍쳐.png)
+<img src="image/개요.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">)
 
 ------------------------------------------------------------------------
 
