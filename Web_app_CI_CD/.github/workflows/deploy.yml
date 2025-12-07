@@ -57,5 +57,5 @@ jobs:
         curl -X POST \
           -H "Authorization: Bearer ${{ secrets.ARGO_TOKEN }}" \
           -H "Content-Type: application/json" \
-          https://argocd.yunsang.cloud/api/v1/applications/test/sync
+          https://<your-argocd-URL>/api/v1/applications/test/sync
 
