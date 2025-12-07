@@ -187,7 +187,30 @@ data:
 </pre>
 <br>
 
-**[3. repository 추가]**
-<img src="image/Argocd_monitoring_app_conf_1.png" alt="설명" width="600" style="border: 10px solid black; border-radius: 5px;">
-<img src="image/Argocd_monitoring_app_conf_2.png" alt="설명" width="800" style="border: 10px solid black; border-radius: 5px;">
+**[3. repository 및 APP 추가]**
+- repository 추가
+ -  HTTPs 형식으로 진행
+ -  자신의 repositroy Https 형식으로 입력
+ -  github ID 및 secret Token 입력
 
+- application 추가
+ -  배포할 namesapce 입력
+ -  해당 namesapce에 배포할 리소스 위치 경로 입력
+
+### Monitoring 설치 
+**[1. Monitoring 설치]**
+
+<pre>
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+ 
+helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring -f prometheus-values.yaml
+
+</pre>
+
+- **Prometheus에 경우 CRD 파일을 설치하는 과정 중 오류가 발생하기 때문에, Argocd가 아닌 별도로 설치를 진행한다.**
+
+**[2. Ingress 실행]**
+<pre>
+ k apply -f grafana-ingress.yaml
+</pre>
