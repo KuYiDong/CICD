@@ -226,7 +226,7 @@ kubectl apply -f grafana-ingress.yaml
 ## 프로젝트 마무리
 **git Action log**
 
-<img src="image/WEB배포 결과.png alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
+<img src="image/WEB배포 결과.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
 
 ---
 
