@@ -71,9 +71,8 @@ Infrastructure as Code(IaC)를 통하여 인프라를 코드 형식으로 관리
  yun@YUN:~/eks_project/terraform_project$ terraform plan 
  yun@YUN:~/eks_project/terraform_project$ terraform apply </pre>
 
-
 <br><br>
-
+---
 ## ALB-Controller & EBS-CSI-Driver
 ###  ALB-Controller 설치
 
@@ -113,8 +112,9 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
   --set region=ap-northeast-2 \
   --set vpcId=$(aws eks describe-cluster --name $Cluster --query "cluster.resourcesVpcConfig.vpcId" --output text)
 </pre>
-<br><br>
 
+<br><br>
+---
 ### EBS-CSI-Driver 설치
 **[1. IAM Role 생성]**
 
@@ -138,8 +138,8 @@ sub": "system:serviceaccount:kube-system:ebs-csi-controller-sa"</pre>
 
 <img src="image/EBS-CSI-Driver 생성.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
 
----
 <br><br>
+---
 ## CI|CD 파이프라인 등록
 ### git repository 생성 및 설정
 
@@ -165,8 +165,8 @@ sub": "system:serviceaccount:kube-system:ebs-csi-controller-sa"</pre>
 - 코드가 GitHub에 올라가면 Actions worklow을 통해 Docker 이미지를 빌드해 ECR에 올립니다.
 - ArgoCD가 Git 레포를 감시해 Kubernetes 클러스터에 자동 배포합니다.
 
-<br>
-
+<br><br>
+---
 ### Argocd 설치 
 **[1. Argocd 설치]**
 <pre>helm repo add argo https://argoproj.github.io/argo-helm
@@ -197,6 +197,8 @@ data:
  -  배포할 namesapce 입력
  -  해당 namesapce에 배포할 리소스 위치 경로 입력
 
+<br><br>
+---
 ### Monitoring 설치 
 **[1. Monitoring 설치]**
 
