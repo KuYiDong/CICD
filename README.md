@@ -6,24 +6,36 @@
 
 ##  <프로젝트 개요>
 
-본 프로젝트는 **Terraform**, **Amazon EKS**, **ArgoCD**, **GitHub
-Actions**, **Prometheus/Grafana**를 활용해\
-**자동화된 Kubernetes 기반 클라우드 인프라 & CI/CD 환경**을 구축한
-내용입니다.
+## 프로젝트 개요
 
+이 프로젝트는 AWS 환경에서 EKS를 중심으로 한 **클라우드 인프라 운영 구조를 직접 구축해보는 개인 실습 프로젝트**입니다.  
+단순히 클러스터를 띄우는 수준이 아니라, 실제로 서비스가 동작할 수 있는 수준의 **네트워크 구성, 인증서/도메인 설정, CI/CD, GitOps, 모니터링, 스토리지**까지 전체 구성을 스스로 설계하고 구현하는 것을 목표로 했습니다.
 
-### 주요 특징
+Terraform을 사용해 VPC, Subnet, RouteTable, EKS, NodeGroup 등 주요 인프라를 코드로 관리하며, GitHub Actions를 통해 Docker 이미지 빌드 → ECR 업로드 → ArgoCD 자동 배포로 이어지는 **자동화된 배포 파이프라인**을 구축했습니다.  
+또한 Prometheus와 Grafana를 활용해 클러스터 리소스와 애플리케이션 상태를 모니터링할 수 있는 환경을 구성했습니다.
 
--   **IaC(Terraform)** 로 VPC, Subnet, Routing, EKS 클러스터 전체 자동
-    구축\
--   **GitOps(ArgoCD)** 로 지속적인 배포 자동화\
--   **GitHub Actions → ECR → EKS** 자동 배포 파이프라인 구성\
--   **Prometheus + Grafana** 를 통한 모니터링 환경 구축\
--   **ALB Controller + EBS CSI Driver** 로 실 서비스 운영을 위한 AWS
-    네이티브 구성
+Route53과 ACM을 연동해 HTTPS 환경을 구축하고, ALB Ingress Controller를 통해 외부 사용자가 웹 서비스에 접근할 수 있도록 설정하여 실제 서비스 배포 과정 전체를 경험해보는 것을 목표로 했습니다.
 
-⚠️ 완전 자동화가 아니므로 ArgoCD 및 일부 리소스는 README의 수동 설정
-지침을 따라 적용해야 합니다.
+이 프로젝트는 개인 학습용으로 진행되었지만, 클라우드 인프라의 구성 요소들이 어떻게 서로 연결되는지 전체 흐름을 이해하고 직접 실습해보는 데 중점을 두고 있습니다.
+
+---
+
+### 프로젝트에서 다루는 핵심 요소
+
+- **Infra 구성 자동화(IaC)**: Terraform을 이용한 VPC, Subnet, NAT, EKS, Node, IAM 등 전체 인프라 자동화
+- **CI/CD 파이프라인**: GitHub Actions로 이미지 빌드 → 테스트 → ECR Push
+- **GitOps 배포**: ArgoCD가 Git 변경을 감지해 EKS로 자동 배포
+- **모니터링 구성**: Prometheus + Grafana 기반 클러스터 및 앱 메트릭 수집
+- **Networking/Ingress**: ALB Ingress Controller + Route53 + ACM 기반 HTTPS 구성
+- **서비스 운영 흐름**: Dockerfile 기반 웹 서비스 지속적 배포 실습
+
+---
+
+### 프로젝트 목적
+
+- AWS와 Kubernetes의 주요 구성 요소를 직접 다뤄보며 전체 구조 이해
+- 인프라 자동화 + 배포 자동화 환경을 직접 구축해보는 실습
+- 포트폴리오로 활용할 수 있는 완성도 있는 클라우드 프로젝트 제작
 
 ------------------------------------------------------------------------
 
