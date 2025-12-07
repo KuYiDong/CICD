@@ -65,7 +65,7 @@ terraform apply
 
 ### 2.1 ALB Controller 설치
 
-### ① IAM Policy 생성
+**① IAM Policy 생성**
 
 ``` bash
 curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.14.1/docs/install/iam_policy.json
@@ -75,7 +75,7 @@ aws iam create-policy \
   --policy-document file://iam_policy.json
 ```
 
-### ② IAM ServiceAccount 생성
+**② IAM ServiceAccount 생성**
 
 ``` bash
 eksctl utils associate-iam-oidc-provider --cluster $Cluster --approve
@@ -89,13 +89,13 @@ eksctl create iamserviceaccount \
   --approve
 ```
 
-### ③ 생성 확인
+**③ 생성 확인**
 
 ``` bash
 kubectl get sa aws-load-balancer-controller -n kube-system -o yaml | grep role-arn
 ```
 
-### ④ Helm 설치
+**④ Helm 설치**
 
 ``` bash
 helm repo add eks https://aws.github.io/eks-charts
@@ -114,11 +114,11 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 
 ### 2.2 EBS CSI Driver 설치
 
-### ① IAM Role 생성
+**① IAM Role 생성**
 
 <img src="image/IAM_Role 생성.png" alt="설명" width="900" style="border: 50px solid black; border-radius: 5px;">
 
-### ② 신뢰관계 정책 수정
+**② 신뢰관계 정책 수정**
 
 <img src="image/신뢰관계정책 설정.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
 
@@ -127,7 +127,7 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 "sub": "system:serviceaccount:kube-system:ebs-csi-controller-sa"
 ```
 
-### ③ EBS CSI Driver 설치
+**③ EBS CSI Driver 설치**
 
 <img src="image/EBS-CSI-Driver 생성.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
 
@@ -141,9 +141,10 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 ### 🔐 GitHub Secrets 추가
 
 - 아래에 항목들을 repo안에 secret으로 설정해준다
--   AWS_ACCESS_KEY_ID\
--   AWS_SECRET_ACCESS_KEY\
--   AWS_REGION\
+- repo안에서 Setting -> Secrets and variables 에서 Repository secrets 설정 진행
+ -   AWS_ACCESS_KEY_ID\
+ -   AWS_SECRET_ACCESS_KEY\
+ -   AWS_REGION\
 
 ------------------------------------------------------------------------
 
@@ -223,6 +224,8 @@ kubectl apply -f grafana-ingress.yaml
 ------------------------------------------------------------------------
 
 ## 프로젝트 마무리
+
+<img src="image/argocd_app_추가(완).png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
 
 Terraform → EKS → GitHub Actions → ECR → ArgoCD → Monitoring\
 모든 구성이 서로 연결되는 형태로 실제 회사에서도 그대로 사용 가능한
