@@ -152,7 +152,7 @@ sub": "system:serviceaccount:kube-system:ebs-csi-controller-sa"</pre>
 <br>
 
 **[Secret 추가]**
-<img src="image/Git_Secret.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
+<img src="image/Git_Secret.png" alt="설명" width="800" style="border: 10px solid black; border-radius: 5px;">
 - GitHub Actions가 AWS에 접근해 ECR에 이미지 올리거나 클러스터를 관리하려면 AWS 인증 정보가 필요해서 Secret으로 저장한다.
 <br>
 
