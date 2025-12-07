@@ -188,6 +188,6 @@ data:
 <br>
 
 **[3. repository 추가]**
-<img src="image/Argocd_monitoring_app_conf_1.png" alt="설명" width="800" style="border: 10px solid black; border-radius: 5px;">
+<img src="image/Argocd_monitoring_app_conf_1.png" alt="설명" width="600" style="border: 10px solid black; border-radius: 5px;">
 <img src="image/Argocd_monitoring_app_conf_2.png" alt="설명" width="800" style="border: 10px solid black; border-radius: 5px;">
 
