@@ -46,7 +46,7 @@ Actions**, **Prometheus/Grafana**를 활용해\
 
 ---
 
-<br><br>
+<br>
 
 ## 1. Terraform 인프라 배포
 
