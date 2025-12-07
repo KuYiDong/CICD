@@ -4,8 +4,6 @@
 
 ------------------------------------------------------------------------
 
-##  <프로젝트 개요>
-
 ## 프로젝트 개요
 
 이 프로젝트는 AWS 환경에서 EKS를 중심으로 한 **클라우드 인프라 운영 구조를 직접 구축해보는 개인 실습 프로젝트**입니다.  
@@ -17,10 +15,9 @@ Terraform을 사용해 VPC, Subnet, RouteTable, EKS, NodeGroup 등 주요 인프
 Route53과 ACM을 연동해 HTTPS 환경을 구축하고, ALB Ingress Controller를 통해 외부 사용자가 웹 서비스에 접근할 수 있도록 설정하여 실제 서비스 배포 과정 전체를 경험해보는 것을 목표로 했습니다.
 
 이 프로젝트는 개인 학습용으로 진행되었지만, 클라우드 인프라의 구성 요소들이 어떻게 서로 연결되는지 전체 흐름을 이해하고 직접 실습해보는 데 중점을 두고 있습니다.
+<br>
 
----
-
-### 프로젝트에서 다루는 핵심 요소
+**프로젝트에서 다루는 핵심 요소**
 
 - **Infra 구성 자동화(IaC)**: Terraform을 이용한 VPC, Subnet, NAT, EKS, Node, IAM 등 전체 인프라 자동화
 - **CI/CD 파이프라인**: GitHub Actions로 이미지 빌드 → 테스트 → ECR Push
@@ -28,14 +25,6 @@ Route53과 ACM을 연동해 HTTPS 환경을 구축하고, ALB Ingress Controller
 - **모니터링 구성**: Prometheus + Grafana 기반 클러스터 및 앱 메트릭 수집
 - **Networking/Ingress**: ALB Ingress Controller + Route53 + ACM 기반 HTTPS 구성
 - **서비스 운영 흐름**: Dockerfile 기반 웹 서비스 지속적 배포 실습
-
----
-
-### 프로젝트 목적
-
-- AWS와 Kubernetes의 주요 구성 요소를 직접 다뤄보며 전체 구조 이해
-- 인프라 자동화 + 배포 자동화 환경을 직접 구축해보는 실습
-- 포트폴리오로 활용할 수 있는 완성도 있는 클라우드 프로젝트 제작
 
 ------------------------------------------------------------------------
 
@@ -55,7 +44,7 @@ Route53과 ACM을 연동해 HTTPS 환경을 구축하고, ALB Ingress Controller
 <br><br>
 <br><br>
 
-# Step By Step
+# [Step By Step]
 
 ---
 
