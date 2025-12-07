@@ -224,27 +224,27 @@ kubectl apply -f grafana-ingress.yaml
 ------------------------------------------------------------------------
 
 ## 프로젝트 마무리
-**git Action log**
+**[git Action log]**
 
 <img src="image/WEB배포 결과.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
 
 ---
 
-**Argocd Syn 성공**
+**[Argocd Syn 성공]**
 
 <img src="image/argocd_app_추가(완).png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
 
 ---
 
-**Web 접속**
+**[Web 접속]**
 
 <img src="image/web.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
 
 ---
 
-**Grafana**
+**[Grafana]**
 
-<img src="image/Grafana-UI.png" alt="설명" width="600" style="border: 10px solid black; border-radius: 5px;">
+<img src="image/Grafana-UI.png" alt="설명" width="500" style="border: 10px solid black; border-radius: 5px;">
 
 Terraform → EKS → GitHub Actions → ECR → ArgoCD → Monitoring\
 모든 구성이 서로 연결되는 형태로 실제 회사에서도 그대로 사용 가능한
