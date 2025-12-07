@@ -8,8 +8,9 @@
 
 본 프로젝트는 **Terraform**, **Amazon EKS**, **ArgoCD**, **GitHub
 Actions**, **Prometheus/Grafana**를 활용해\
-**완전 자동화된 Kubernetes 기반 클라우드 인프라 & CI/CD 환경**을 구축한
+**자동화된 Kubernetes 기반 클라우드 인프라 & CI/CD 환경**을 구축한
 내용입니다.
+
 
 ### 주요 특징
 
