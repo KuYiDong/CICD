@@ -28,12 +28,13 @@ Actions**, **Prometheus/Grafana**를 활용해\
 
 ## 디렉토리 구조
 
-  디렉토리                     설명
-  ---------------------------- --------------------------------------------
-  **Web_app_CI_CD/**           Nginx 기반 Deployment + CI/CD용 매니페스트
-  **ingress/**                 ArgoCD / Grafana / Prometheus Ingress
-  **kube-prometheus-stack/**   Helm 기반 모니터링 스택
-  **terraform_project/**       VPC, EKS 클러스터 등 Terraform 코드
+| 디렉토리 | 설명 |
+|----------|-------|
+| **Web_app_CI_CD/** | Nginx 기반 Deployment + CI/CD용 매니페스트 |
+| **ingress/** | ArgoCD / Grafana / Prometheus Ingress 설정 |
+| **kube-prometheus-stack/** | Helm 기반 Prometheus·Grafana 모니터링 스택 |
+| **terraform_project/** | VPC, 서브넷, 라우팅, EKS 클러스터 Terraform 코드 |
+
 
 ------------------------------------------------------------------------
 
