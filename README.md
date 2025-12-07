@@ -15,6 +15,7 @@ Terraform을 사용해 VPC, Subnet, RouteTable, EKS, NodeGroup 등 주요 인프
 Route53과 ACM을 연동해 HTTPS 환경을 구축하고, ALB Ingress Controller를 통해 외부 사용자가 웹 서비스에 접근할 수 있도록 설정하여 실제 서비스 배포 과정 전체를 경험해보는 것을 목표로 했습니다.
 
 이 프로젝트는 개인 학습용으로 진행되었지만, 클라우드 인프라의 구성 요소들이 어떻게 서로 연결되는지 전체 흐름을 이해하고 직접 실습해보는 데 중점을 두고 있습니다.
+
 <br>
 
 **프로젝트에서 다루는 핵심 요소**
@@ -125,7 +126,7 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
 <img src="image/신뢰관계정책 설정.png" alt="설명" width="900" style="border: 10px solid black; border-radius: 5px;">
 
 ``` json
-"aud": "sts.amazonaws.com",
+"aud": "sts.amazonaws.com", #해당 내용을 아래와 같이 변경
 "sub": "system:serviceaccount:kube-system:ebs-csi-controller-sa"
 ```
 
