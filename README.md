@@ -1,6 +1,6 @@
 # AWS 인프라 & CI/CD 프로젝트 포트폴리오
 
-<img src="image/개요.png" alt="설명" width="100" style="border: 10px solid black; border-radius: 5px;">
+<img src="image/개요.png" alt="설명" width="1000" style="border: 10px solid black; border-radius: 5px;">
 
 ------------------------------------------------------------------------
 
