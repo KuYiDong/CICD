@@ -4,7 +4,7 @@
 
 # EKS 기반 CI/CD & GitOps 클라우드 인프라 구축 프로젝트
 
-## 📌 Overview
+##  Overview
 이 프로젝트는 AWS 환경에서 EKS를 중심으로 하는 **클라우드 인프라 운영 환경을 직접 구축한 개인 프로젝트**입니다.  
 Terraform 기반 인프라 자동화, GitHub Actions를 활용한 CI/CD 파이프라인, ArgoCD를 통한 GitOps 배포, Prometheus/Grafana 모니터링까지 포함한 **엔드투엔드(End-to-End) 클라우드 구성**을 목표로 합니다.
 
@@ -12,7 +12,7 @@ Terraform 기반 인프라 자동화, GitHub Actions를 활용한 CI/CD 파이�
 
 ---
 
-## 📐 Architecture
+##  Architecture
 
 **Terraform**
 - VPC, Subnet, Routing, NAT, IGW  
@@ -38,7 +38,7 @@ Terraform 기반 인프라 자동화, GitHub Actions를 활용한 CI/CD 파이�
 
 ---
 
-## ⚙️ Technology Stack
+##  Technology Stack
 
 | Category | Tools |
 |---------|-------|
@@ -53,7 +53,7 @@ Terraform 기반 인프라 자동화, GitHub Actions를 활용한 CI/CD 파이�
 
 ---
 
-## 🚀 Features
+##  Features
 
 ### ✔ Infrastructure as Code
 - Terraform으로 AWS 인프라 전체 자동화  
@@ -84,13 +84,14 @@ Terraform 기반 인프라 자동화, GitHub Actions를 활용한 CI/CD 파이�
 
 ---
 
-## 📂 Repository Structure
+##  Repository Structure
 
 ```
 CICD/
-├── terraform/            # VPC, EKS, IAM 등 IaC 코드
-├── manifests/            # Kubernetes manifests
-├── image/                # Dockerfile 및 서비스 파일
+├── terraform_project/            # VPC, EKS, IAM 등 IaC 코드
+├── Web_app_CI_CD/            # Kubernetes manifests
+├── ingress/                 # Argocd, grafana ingress
+├── kube-prometheus-stack    # prometheus, grafana helm
 ├── .github/workflows/    # GitHub Actions CI/CD 파이프라인
 └── README.md
 ```
