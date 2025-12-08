@@ -98,7 +98,7 @@ CICD/
 
 ---
 
-## 🔄 CI/CD Workflow
+## CI/CD Workflow
 
 1. 코드 commit/push  
 2. GitHub Actions 동작  
@@ -111,7 +111,7 @@ CICD/
 
 ---
 
-## 🧪 Deployment Guide (요약)
+## Deployment Guide (요약)
 
 ### 1) Infrastructure 배포
 ```bash
@@ -128,7 +128,7 @@ Route53에 연결된 도메인 접속 → ALB → EKS 서비스 제공
 
 ---
 
-## 📊 Monitoring
+## Monitoring
 
 - Prometheus가 모든 메트릭 수집  
 - Grafana에서 대시보드 조회  
@@ -137,7 +137,7 @@ Route53에 연결된 도메인 접속 → ALB → EKS 서비스 제공
 
 ---
 
-## 🎯 Project Goal
+## Project Goal
 
 - AWS 기반 클라우드 인프라 전체 구성 경험  
 - Terraform 기반 인프라 자동화 역량 강화  
@@ -146,7 +146,7 @@ Route53에 연결된 도메인 접속 → ALB → EKS 서비스 제공
 
 ---
 
-## 📘 Summary
+## Summary
 
 AWS 기반 EKS 클러스터 운영부터 CI/CD 자동화, HTTPS 인프라 구성, 모니터링 환경까지  
 실제 서비스 운영에 필요한 핵심 요소를 모두 다루는 개인 프로젝트입니다.  
